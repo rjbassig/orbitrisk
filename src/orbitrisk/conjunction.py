@@ -29,6 +29,10 @@ def screen(objects: Iterable[OrbitalObject], start: datetime, hours: int = 24, t
     objects = list(objects)
     steps = range(0, hours * 60 + 1, step_minutes)
     for first, second in combinations(objects, 2):
+        # Stations catalogs include attached modules that intentionally share a TLE.
+        # They are not independent conjunction candidates.
+        if first.line1[18:] == second.line1[18:] and first.line2[8:] == second.line2[8:]:
+            continue
         distances = []
         for minute in steps:
             timestamp = start + timedelta(minutes=minute)
