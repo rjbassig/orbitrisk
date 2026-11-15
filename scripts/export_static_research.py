@@ -32,6 +32,7 @@ payload = {
     "trajectories": [{"object": catalog[index], "points": trajectory(obj, now)} for index, obj in enumerate(objects[:4])],
     "screen": {"window_hours": 24, "threshold_km": 1000, "events": screen(objects, now, 24, 1000)},
     "synthetic": synthetic_probability(),
+    "synthetic_grid": [synthetic_probability(sigma_m=sigma, hard_body_radius_m=radius) for sigma in (10, 50, 100, 250, 500, 1000) for radius in (1, 5, 10, 25, 50)],
 }
 OUT.write_text(json.dumps(payload, separators=(",", ":")))
 print(OUT)

@@ -12,7 +12,11 @@ async function snapshot(pathname: string, search: URLSearchParams) {
     return match || { detail: "NORAD object is not in the precomputed snapshot" };
   }
   if (pathname === "conjunctions") return { mode: data.mode, generated_at: data.generated_at, ...data.screen, limitations: data.limitation };
-  if (pathname === "synthetic/probability") return data.synthetic;
+  if (pathname === "synthetic/probability") {
+    const sigma = Number(search.get("sigma_m") || 100);
+    const radius = Number(search.get("hard_body_radius_m") || 10);
+    return data.synthetic_grid.reduce((best: { sigma_m: number; hard_body_radius_m: number }, item: { sigma_m: number; hard_body_radius_m: number }) => Math.abs(item.sigma_m - sigma) + Math.abs(item.hard_body_radius_m - radius) < Math.abs(best.sigma_m - sigma) + Math.abs(best.hard_body_radius_m - radius) ? item : best);
+  }
   if (pathname === "synthetic/convergence") return [];
   return { detail: "Snapshot route not found" };
 }
