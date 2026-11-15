@@ -31,7 +31,15 @@ def screen(objects: Iterable[OrbitalObject], start: datetime, hours: int = 24, t
     for first, second in combinations(objects, 2):
         # Stations catalogs include attached modules that intentionally share a TLE.
         # They are not independent conjunction candidates.
-        if first.line1[18:-1] == second.line1[18:-1] and first.line2[8:-1] == second.line2[8:-1]:
+        if (
+            abs(first.satrec.jdsatepoch - second.satrec.jdsatepoch) < 1.5
+            and abs(first.satrec.inclo - second.satrec.inclo) < 0.001
+            and abs(first.satrec.ecco - second.satrec.ecco) < 0.001
+            and abs(first.satrec.no_kozai - second.satrec.no_kozai) < 1e-5
+            and abs(first.satrec.argpo - second.satrec.argpo) < 0.2
+            and abs(first.satrec.nodeo - second.satrec.nodeo) < 0.2
+            and abs(first.satrec.mo - second.satrec.mo) < 0.2
+        ):
             continue
         distances = []
         for minute in steps:
