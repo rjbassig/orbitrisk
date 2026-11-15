@@ -17,6 +17,8 @@ async function snapshot(pathname: string, search: URLSearchParams) {
     const radius = Number(search.get("hard_body_radius_m") || 10);
     return data.synthetic_grid.reduce((best: { sigma_m: number; hard_body_radius_m: number }, item: { sigma_m: number; hard_body_radius_m: number }) => Math.abs(item.sigma_m - sigma) + Math.abs(item.hard_body_radius_m - radius) < Math.abs(best.sigma_m - sigma) + Math.abs(best.hard_body_radius_m - radius) ? item : best);
   }
+  if (pathname === "synthetic/grid") return data.synthetic_grid;
+  if (pathname === "synthetic/grid") return data.synthetic_grid;
   if (pathname === "synthetic/convergence") return [];
   return { detail: "Snapshot route not found" };
 }
