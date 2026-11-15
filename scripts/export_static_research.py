@@ -29,7 +29,7 @@ payload = {
     "sha256": hashlib.sha256(TLE.read_bytes()).hexdigest(),
     "retrieved_at": datetime.fromtimestamp(TLE.stat().st_mtime, tz=UTC).isoformat(),
     "catalog": catalog,
-    "trajectories": [{"object": catalog[index], "points": trajectory(obj, now)} for index, obj in enumerate(objects[:4])],
+    "trajectories": [{"object": catalog[index], "points": trajectory(obj, now)} for index, obj in enumerate(objects)],
     "screen": {"window_hours": 24, "threshold_km": 1000, "events": screen(objects, now, 24, 1000)},
     "synthetic": synthetic_probability(),
     "synthetic_grid": [synthetic_probability(sigma_m=sigma, hard_body_radius_m=radius) for sigma in (10, 50, 100, 250, 500, 1000) for radius in (1, 5, 10, 25, 50)],
