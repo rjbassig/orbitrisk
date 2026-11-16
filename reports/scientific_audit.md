@@ -2,11 +2,11 @@
 
 This release uses one preserved source snapshot, not synthetic observations:
 
-- Provider/query: CelesTrak GP Stations, `https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle`
-- Retrieved: `2026-11-15T19:23:04.364172+00:00`
-- Source SHA-256: `7b8ef816bfd5437fa9b0b60febbc9aef40c5a8af494ca00e7fefc6bdd898f10f`
-- Catalog: 13 unique objects; 13 propagated trajectories in the static release.
-- Screen: 24 hours, 1,000 km threshold, five retained candidates.
+- Provider/query: CelesTrak GP Resource, `https://celestrak.org/NORAD/elements/gp.php?GROUP=resource&FORMAT=tle`
+- Retrieved: `2026-11-16T21:09:14.307708+00:00`
+- Source SHA-256: `b938ed2acadbbba180d1329c6c7d7ad2d8af0ea4abe994776a42f558f7ba2d9d`
+- Catalog: 167 valid objects; 167 propagated trajectories in the static release. Invalid SGP4 records are excluded; duplicate TLE modules are excluded from candidate screening.
+- Screen: 24 hours, 1,000 km alert threshold, 5,738 retained geometric candidates; nearest-approach ranking is published under a separate 2,000 km ceiling.
 - Propagation: SGP4, TEME inertial frame, kilometers and km/s.
 - Refinement: 10-minute coarse pairwise screen followed by bounded scalar minimum refinement.
 - Real outputs: TLE metadata, propagated position/velocity states, TCA, miss distance, and relative velocity.

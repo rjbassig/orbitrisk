@@ -2,15 +2,31 @@
 
 ## Abstract
 
-OrbitRisk demonstrates a transparent public-data workflow for satellite close-approach screening. It ingests an attributed CelesTrak Stations TLE snapshot, propagates compatible elements with SGP4 in the TEME inertial frame, screens object pairs geometrically, and refines candidate times of closest approach. Public TLE data lacks covariance, so real-data outputs are restricted to miss distance and relative velocity. A separate synthetic encounter-plane experiment demonstrates probability sensitivity under stated Gaussian assumptions.
+OrbitRisk demonstrates a transparent public-data workflow for satellite close-approach screening. It ingests an attributed CelesTrak Resource TLE snapshot, propagates compatible elements with SGP4 in the TEME inertial frame, screens object pairs geometrically, and refines candidate times of closest approach. Public TLE data lacks covariance, so real-data outputs are restricted to miss distance and relative velocity. A separate synthetic encounter-plane experiment demonstrates probability sensitivity under stated Gaussian assumptions.
 
 ## Data and propagation
 
-The catalog is CelesTrak GP Stations data. Each parsed record retains NORAD ID, name, source TLE lines, epoch, inclination, eccentricity, and mean motion. SGP4 produces TEME position and velocity in kilometers and km/s. TEME is not treated as an Earth-fixed frame. Source retrieval time, individual epochs, and a SHA-256 snapshot checksum are published through the API.
+The expanded catalog is CelesTrak GP Resource data (`GROUP=resource`), retrieved 2026-11-16T21:09:14Z. It contains 167 valid TLE records after parser validation. Each record retains NORAD ID, name, source TLE lines, epoch, inclination, eccentricity, and mean motion. SGP4 produces TEME position and velocity in kilometers and km/s. TEME is not treated as an Earth-fixed frame. The source URL, retrieval time, object count, filtering criteria, and SHA-256 snapshot checksum are published through the API.
 
 ## Screening method
 
 For each object pair, states are sampled at a 10-minute interval during a bounded prediction window. Pairs whose coarse minimum is plausibly near the screening threshold are refined by bounded scalar minimization of relative Euclidean distance. The resulting TCA, miss distance, and relative velocity are geometric estimates. This is a research screen rather than a conjunction-data-message or operational screening service.
+
+## Verified screening results
+
+The 24-hour Resource-catalog replay evaluates 13,861 unique object pairs. The
+1,000 km alert screen retained 5,738 geometric candidates. The nearest ranked
+pair was TERRASAR-X / TANDEM-X at 0.0999 km minimum separation and 0.0004
+km/s relative velocity at 2026-11-17T00:29:05Z. The ranking uses a separate
+2,000 km ceiling and is not a collision-probability estimate. Attached or
+co-located modules are excluded from duplicate-TLE candidate screening and are
+identified as catalog relationships when interpreting minima.
+
+![Nearest geometric approaches](figures/nearest_approaches.svg)
+
+The figure is generated from `reports/nearest_approaches.csv` and the verified
+static snapshot. It reports sampled geometric proximity only; public TLEs do
+not provide covariance or an operational conjunction assessment.
 
 ## Synthetic uncertainty experiment
 

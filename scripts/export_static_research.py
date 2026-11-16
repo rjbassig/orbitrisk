@@ -12,9 +12,9 @@ from orbitrisk.propagation import trajectory
 from orbitrisk.uncertainty import synthetic_probability
 
 ROOT = Path(__file__).parents[1]
-TLE = ROOT / "data/raw/celestrak-stations.tle"
+TLE = ROOT / "data/raw/celestrak-resource.tle"
 OUT = ROOT / "web/public/research/orbitrisk-snapshot.json"
-SOURCE = "https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle"
+SOURCE = "https://celestrak.org/NORAD/elements/gp.php?GROUP=resource&FORMAT=tle"
 
 now = datetime.now(UTC)
 objects = load_tle(TLE)
@@ -23,6 +23,8 @@ payload = {
     "mode": "precomputed public-TLE snapshot",
     "generated_at": now.isoformat(),
     "source": SOURCE,
+    "catalog_name": "CelesTrak Resource",
+    "catalog_filter": "All valid records in the public Resource group; invalid SGP4 records excluded by the parser; attached duplicate-TLE modules excluded from conjunction candidates.",
     "frame": "TEME inertial",
     "units": "kilometers and km/s",
     "limitation": "This static release is a reproducible geometric screen, not an operational conjunction assessment. Public TLEs contain no covariance.",
@@ -30,7 +32,7 @@ payload = {
     "retrieved_at": datetime.fromtimestamp(TLE.stat().st_mtime, tz=UTC).isoformat(),
     "catalog": catalog,
     "trajectories": [{"object": catalog[index], "points": trajectory(obj, now)} for index, obj in enumerate(objects)],
-    "screen": {"window_hours": 24, "threshold_km": 1000, "events": screen(objects, now, 24, 1000)},
+    "screen": {"window_hours": 24, "threshold_km": 1000, "pairs_evaluated": len(objects) * (len(objects) - 1) // 2, "events": screen(objects, now, 24, 1000), "nearest_approaches": screen(objects, now, 24, 2000)[:25], "ranking_ceiling_km": 2000},
     "synthetic": synthetic_probability(),
     "synthetic_grid": [synthetic_probability(sigma_m=sigma, hard_body_radius_m=radius) for sigma in (10, 50, 100, 250, 500, 1000) for radius in (1, 5, 10, 25, 50)],
 }

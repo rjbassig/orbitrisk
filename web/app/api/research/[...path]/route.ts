@@ -5,19 +5,19 @@ const base = () => process.env.ORBITRISK_API_BASE_URL || "http://localhost:8000"
 async function snapshot(pathname: string, search: URLSearchParams) {
   const data = JSON.parse(await readFile(path.join(process.cwd(), "public/research/orbitrisk-snapshot.json"), "utf8"));
   if (pathname === "catalog") return data.catalog;
-  if (pathname === "provenance") return { source: data.source, snapshot_file: "celestrak-stations.tle", sha256: data.sha256, retrieved_at: data.retrieved_at, objects: data.catalog.length, frame: data.frame, units: data.units, limitation: data.limitation };
+  if (pathname === "provenance") return { source: data.source, snapshot_file: "celestrak-resource.tle", catalog_name: data.catalog_name, catalog_filter: data.catalog_filter, sha256: data.sha256, retrieved_at: data.retrieved_at, objects: data.catalog.length, frame: data.frame, units: data.units, limitation: data.limitation };
   if (pathname.startsWith("trajectory/")) {
     const id = Number(pathname.split("/")[1]);
     const match = data.trajectories.find((item: { object: { norad_id: number } }) => item.object.norad_id === id);
     return match || { detail: "NORAD object is not in the precomputed snapshot" };
   }
   if (pathname === "conjunctions") return { mode: data.mode, generated_at: data.generated_at, ...data.screen, limitations: data.limitation };
+  if (pathname === "nearest") return { mode: data.mode, generated_at: data.generated_at, ranking_ceiling_km: data.screen.ranking_ceiling_km, events: data.screen.nearest_approaches, limitations: data.limitation };
   if (pathname === "synthetic/probability") {
     const sigma = Number(search.get("sigma_m") || 100);
     const radius = Number(search.get("hard_body_radius_m") || 10);
     return data.synthetic_grid.reduce((best: { sigma_m: number; hard_body_radius_m: number }, item: { sigma_m: number; hard_body_radius_m: number }) => Math.abs(item.sigma_m - sigma) + Math.abs(item.hard_body_radius_m - radius) < Math.abs(best.sigma_m - sigma) + Math.abs(best.hard_body_radius_m - radius) ? item : best);
   }
-  if (pathname === "synthetic/grid") return data.synthetic_grid;
   if (pathname === "synthetic/grid") return data.synthetic_grid;
   if (pathname === "synthetic/convergence") return [];
   return { detail: "Snapshot route not found" };

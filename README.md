@@ -8,22 +8,22 @@ Research report: `https://rjbassig.dev/work/orbitrisk/report`
 
 ## What it does
 
-The real-data mode loads CelesTrak's credential-free Stations TLE catalog, keeps the original TLE snapshot in `data/raw`, parses NORAD identifiers and orbital metadata, propagates TEME states with SGP4, and screens pairs over a configurable window. A 10-minute coarse scan supplies candidates; each candidate is refined with a bounded scalar minimization of relative distance. The API reports TCA, miss distance, and relative velocity.
+The real-data mode loads CelesTrak's credential-free Resource TLE catalog (167 valid records in the current snapshot), keeps the original TLE snapshot in `data/raw`, parses NORAD identifiers and orbital metadata, propagates TEME states with SGP4, and screens pairs over a bounded 24-hour window. A 10-minute coarse scan supplies candidates; each candidate is refined with a bounded scalar minimization of relative distance. The API reports TCA, miss distance, relative velocity, and a separate nearest-approach ranking under a 2,000 km ceiling.
 
 The synthetic mode is deliberately separate. It estimates collision probability for a controlled two-dimensional encounter-plane experiment with explicit Gaussian covariance and hard-body-radius assumptions. It is not a probability estimate for a public-TLE event.
 
 ## Data provenance and limits
 
-- **Source:** [CelesTrak GP data](https://celestrak.org/NORAD/documentation/gp-data-formats.php), Stations group. The original downloaded snapshot and a SHA-256 exposed by `/api/provenance` make the release auditable.
+- **Source:** [CelesTrak GP data](https://celestrak.org/NORAD/documentation/gp-data-formats.php), Resource group (`GROUP=resource`). The original downloaded snapshot, retrieval timestamp, object count, filtering criteria, and SHA-256 exposed by `/api/provenance` make the release auditable.
 - **Frame and units:** SGP4 returns TEME inertial position/velocity, in km and km/s. The app does not present these raw states as Earth-fixed coordinates.
-- **Freshness:** every catalog response exposes each TLE epoch; the API exposes the snapshot retrieval time. Refresh `data/raw/celestrak-stations.tle` with `curl` when reproducing a later screen.
+- **Freshness:** every catalog response exposes each TLE epoch; the API exposes the snapshot retrieval time. Refresh `data/raw/celestrak-resource.tle` with `curl` when reproducing a later screen.
 - **Limitations:** public TLEs do not provide covariance or the state quality required for operational conjunction assessment. The project is not a warning service and never assigns a real collision probability.
 
 ## Architecture
 
 ```text
-data/raw/celestrak-stations.tle -> ingestion -> SGP4/TEME propagation
-                                            -> coarse screen + refined TCA -> FastAPI
+data/raw/celestrak-resource.tle -> ingestion -> SGP4/TEME propagation
+                                            -> coarse screen + refined TCA + ranking -> FastAPI
                                                                            -> Next.js + React Three Fiber
 ```
 

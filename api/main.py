@@ -17,8 +17,8 @@ from orbitrisk.propagation import trajectory
 from orbitrisk.uncertainty import synthetic_probability
 
 ROOT = Path(__file__).resolve().parents[1]
-TLE = ROOT / "data/raw/celestrak-stations.tle"
-SOURCE = "https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle"
+TLE = ROOT / "data/raw/celestrak-resource.tle"
+SOURCE = "https://celestrak.org/NORAD/elements/gp.php?GROUP=resource&FORMAT=tle"
 app = FastAPI(title="OrbitRisk", version="0.1.0", description="Public-TLE geometric screening and explicit synthetic uncertainty experiments.")
 origins = [item.strip().rstrip("/") for item in os.getenv("ORBITRISK_CORS_ORIGINS", "https://orbitrisk.rjbassig.dev,https://rjbassig.dev,http://localhost:3000").split(",") if item.strip()]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET"], allow_headers=["Content-Type"])
@@ -29,7 +29,7 @@ def catalog(): return load_tle(TLE)
 def provenance():
     payload = TLE.read_bytes()
     objects = catalog()
-    return {"source": SOURCE, "snapshot_file": TLE.name, "sha256": hashlib.sha256(payload).hexdigest(), "retrieved_at": datetime.fromtimestamp(TLE.stat().st_mtime, tz=UTC).isoformat(), "objects": len(objects), "frame": "TEME inertial", "units": "kilometers and km/s", "limitation": "Public TLEs have no covariance; this API never reports operational collision probability."}
+    return {"source": SOURCE, "snapshot_file": TLE.name, "catalog_name": "CelesTrak Resource", "catalog_filter": "All valid records in the Resource group; attached duplicate-TLE modules excluded from conjunction candidates.", "sha256": hashlib.sha256(payload).hexdigest(), "retrieved_at": datetime.fromtimestamp(TLE.stat().st_mtime, tz=UTC).isoformat(), "objects": len(objects), "frame": "TEME inertial", "units": "kilometers and km/s", "limitation": "Public TLEs have no covariance; this API never reports operational collision probability."}
 
 @app.get("/health")
 def health():
@@ -41,7 +41,7 @@ def get_provenance(): return provenance()
 
 @app.get("/api/catalog")
 def get_catalog():
-    return [{"norad_id": item.norad_id, "name": item.name, "epoch": item.epoch.isoformat(), "inclination_deg": round(item.inclination_deg, 4), "eccentricity": item.eccentricity, "mean_motion_rev_day": round(item.mean_motion_rev_day, 6), "source": "CelesTrak Stations snapshot"} for item in catalog()]
+    return [{"norad_id": item.norad_id, "name": item.name, "epoch": item.epoch.isoformat(), "inclination_deg": round(item.inclination_deg, 4), "eccentricity": item.eccentricity, "mean_motion_rev_day": round(item.mean_motion_rev_day, 6), "source": "CelesTrak Resource snapshot"} for item in catalog()]
 
 @app.get("/api/trajectory/{norad_id}")
 def get_trajectory(norad_id: int):
