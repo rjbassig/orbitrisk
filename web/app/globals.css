@@ -67,3 +67,11 @@ body{background:var(--bg);color:var(--text)}body::before{content:"";position:fix
 @media(max-width:1050px){.explorer-toolbar{grid-template-columns:repeat(3,minmax(0,1fr))}.reset-filter{width:100%}}
 @media(max-width:820px){.explorer-toolbar{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px}.explorer-toolbar label:first-child{grid-column:1/-1}.explorer-list{max-height:390px}.explorer-list button{grid-template-columns:36px minmax(0,1fr);gap:10px;padding:12px}.explorer-list strong{text-align:left;grid-column:2}.explorer-summary{line-height:1.6}}
 body{font-family:"DM Sans",Arial,Helvetica,sans-serif}.brand{font-family:"DM Sans",Arial,Helvetica,sans-serif}.terminal nav a{font-family:"DM Sans",Arial,Helvetica,sans-serif}.terminal nav a::first-letter{font-family:"IBM Plex Mono",monospace}
+.terminal nav a.active{background:var(--accent-bg);color:var(--text)}
+.terminal nav a:first-child:not(.active){background:transparent;color:var(--muted)}
+.view-conjunctions .overview,.view-conjunctions .simulator,.view-conjunctions .analysis:not(#conjunctions),.view-conjunctions .dataset-section,.view-conjunctions .method,
+.view-analysis .overview,.view-analysis .simulator,.view-analysis .dataset-section,.view-analysis .method,
+.view-evaluation .overview,.view-evaluation .simulator,.view-evaluation .dataset-section,.view-evaluation .method,
+.view-explainability .overview,.view-explainability .simulator,.view-explainability .dataset-section,.view-explainability .method,
+.view-data-quality .overview,.view-data-quality .simulator,.view-data-quality .analysis,.view-data-quality .method,
+.view-research .overview,.view-research .simulator,.view-research .analysis{display:none}
