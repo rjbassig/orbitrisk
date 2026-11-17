@@ -1,0 +1,34 @@
+{
+  "mode": "precomputed public-TLE snapshot",
+  "generated_at": "2026-11-16T21:29:56.168325+00:00",
+  "source": "https://celestrak.org/NORAD/elements/gp.php?GROUP=resource&FORMAT=tle",
+  "catalog_name": "CelesTrak Resource",
+  "catalog_filter": "All valid records in the public Resource group; invalid SGP4 records excluded by the parser; attached duplicate-TLE modules excluded from conjunction candidates.",
+  "frame": "TEME inertial",
+  "units": "kilometers and km/s",
+  "limitation": "This static release is a reproducible geometric screen, not an operational conjunction assessment. Public TLEs contain no covariance.",
+  "sha256": "b938ed2acadbbba180d1329c6c7d7ad2d8af0ea4abe994776a42f558f7ba2d9d",
+  "retrieved_at": "2026-11-16T21:09:14.307708+00:00",
+  "catalog_objects": 167,
+  "pairs_evaluated": 13861,
+  "geometric_candidates": 5738,
+  "ranking_ceiling_km": 2000,
+  "files": {
+    "resource-snapshot.tle": {
+      "sha256": "b938ed2acadbbba180d1329c6c7d7ad2d8af0ea4abe994776a42f558f7ba2d9d",
+      "bytes": 28056
+    },
+    "catalog-objects.csv": {
+      "sha256": "b617a4b7de31576ee4126583d62e9168ad62e728dd3c7d9803cb31a9d76560bc",
+      "bytes": 13247
+    },
+    "screening-results.csv": {
+      "sha256": "3fa9859aab1f3818ebe37208e9b35ddc30734161348acf2e74483b20fd1e9825",
+      "bytes": 908712
+    },
+    "nearest-approaches.csv": {
+      "sha256": "248236a3c8f12c8b27bf456d4945516fb1c4ddb39d7a85c4b6e8704aff67a745",
+      "bytes": 880
+    }
+  }
+}
