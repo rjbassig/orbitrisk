@@ -1,2 +1,2 @@
-import OrbitRisk from "../orbit-dashboard";
-export default function Page() { return <OrbitRisk view="evaluation" />; }
+import { redirect } from "next/navigation";
+export default function Page() { redirect("/conjunctions"); }
